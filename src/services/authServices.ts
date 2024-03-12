@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 const prisma = new PrismaClient();
 const JWT_SECRET = 'your_secret_key';
 
-export const registerUser = async (username: string, email: string, password: string): Promise<void> => {
+export const registerUser = async (name: string, username: string, email: string, password: string, birthdate: Date): Promise<string> => {
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
         throw new Error('User with this email already exists');
@@ -14,7 +14,8 @@ export const registerUser = async (username: string, email: string, password: st
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await prisma.user.create({ data: { username, email, password: hashedPassword } });
+    await prisma.user.create({ data: { name, username, email, password: hashedPassword, birthdate, emailVerified: true } });
+    return 'User registered successfully';
 };
 
 export const loginUser = async (email: string, password: string): Promise<string> => {

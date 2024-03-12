@@ -3,10 +3,10 @@ import { Request, Response } from 'express';
 import * as authService from '../services/authServices';
 
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
-  const { username, email, password } = req.body;
+  const { name, username, email, password, birthdate } = req.body;
 
   try {
-    await authService.registerUser(username, email, password);
+    await authService.registerUser(name, username, email, password, birthdate);
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error('Error registering user:', error);
