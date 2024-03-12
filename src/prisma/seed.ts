@@ -27,7 +27,7 @@ async function main() {
             update: {},
             create: {
                 email: 'bob@example.com',
-                name: 'Alice',
+                name: 'Bob',
                 username: 'bobgundul',
                 password: hashedPassword, // Add a password field
                 birthdate: new Date('1995-05-15'), // Example birthdate
