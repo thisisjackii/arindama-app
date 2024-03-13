@@ -6,8 +6,8 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
   const { name, username, email, password, birthdate } = req.body;
 
   try {
-    await authService.registerUser(name, username, email, password, birthdate);
-    res.status(201).json({ message: 'User registered successfully' });
+    const regist = await authService.registerUser(name, username, email, password, birthdate);
+    res.status(201).json({ message: regist });
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -15,14 +15,14 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 };
 
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body;
+  const { identifier, password } = req.body;
 
   try {
-    const token = await authService.loginUser(email, password);
-    res.json({ token });
-  } catch (error) {
+    const token = await authService.loginUser(identifier.includes('@') ? 'email' : 'username', identifier, password);
+    res.json({ message: 'User logged in successfully', token });
+  } catch (error: any) {
     console.error('Error logging in user:', error);
-    res.status(401).json({ error: error });
+    res.status(401).json({ error: error.message });
   }
 };
 

@@ -18,8 +18,14 @@ export const registerUser = async (name: string, username: string, email: string
     return 'User registered successfully';
 };
 
-export const loginUser = async (email: string, password: string): Promise<string> => {
-    const user = await prisma.user.findUnique({ where: { email } });
+export const loginUser = async (identifierType: 'email' | 'username', identifier: string, password: string): Promise<string> => {
+    let user;
+    if (identifierType === 'email') {
+        user = await prisma.user.findUnique({ where: { email: identifier } });
+    } else {
+        user = await prisma.user.findUnique({ where: { username: identifier } });
+    }
+
     if (!user) {
         throw new Error('Invalid credentials');
     }
